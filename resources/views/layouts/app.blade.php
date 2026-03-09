@@ -89,7 +89,8 @@
         <aside
             class="hidden md:flex md:flex-col w-72 bg-white/80 dark:bg-gray-900/80 backdrop-blur-3xl border-r border-gray-200/50 dark:border-gray-800/50 fixed inset-y-0 left-0 z-40 shadow-2xl">
             <div class="h-24 flex items-center px-8 border-b border-gray-100 dark:border-gray-800/50">
-                <a href="{{ url('/') }}" class="flex items-center space-x-3 group">
+                <a href="{{ auth()->check() ? route('dashboard') : url('/') }}"
+                    class="flex items-center space-x-3 group">
                     <div
                         class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-500 to-accent-500 flex items-center justify-center shadow-lg shadow-brand-500/30 transform group-hover:rotate-12 transition-transform">
                         <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -151,6 +152,21 @@
                     Friends
                 </a>
 
+                <a href="{{ route('notifications.index') }}"
+                    class="flex items-center px-4 py-3 rounded-2xl transition-all duration-300 {{ request()->routeIs('notifications.*') ? 'bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white font-semibold' }}">
+                    <svg class="w-6 h-6 mr-4 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="{{ request()->routeIs('notifications.*') ? '2.5' : '2' }}"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                        </path>
+                        @if (auth()->check() && auth()->user()->unreadNotifications->count() > 0)
+                            <circle cx="18" cy="6" r="3" fill="#ef4444"
+                                class="absolute shadow-sm shadow-red-500/50" />
+                        @endif
+                    </svg>
+                    Notifications
+                </a>
+
                 <div class="pt-6 mt-4 border-t border-gray-100 dark:border-gray-800/50">
                     <p class="px-4 text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
                         Settings</p>
@@ -181,14 +197,14 @@
 
             <!-- Desktop Sidebar OCR/Add Expense Button -->
             <div class="px-6 py-6 border-t border-gray-100 dark:border-gray-800/50">
-                <button
+                <a href="{{ route('events.create') }}"
                     class="w-full bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 text-white font-bold rounded-2xl py-4 shadow-lg shadow-brand-500/20 transform hover:-translate-y-1 transition duration-300 flex items-center justify-center">
                     <svg class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                        stroke-width="2">
+                        stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
-                    New Expense
-                </button>
+                    New Event
+                </a>
             </div>
         </aside>
 
@@ -211,10 +227,10 @@
                             </svg>
                         </div>
                     </div>
-                    <div
-                        class="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 tracking-tight">
+                    <a href="{{ auth()->check() ? route('dashboard') : url('/') }}"
+                        class="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 tracking-tight hover:opacity-80 transition-opacity">
                         Ehsebly
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Right: Theme Toggle, Notifications, Profile -->
@@ -442,18 +458,15 @@
                 <span class="text-[10px] font-bold">Events</span>
             </a>
 
-            <!-- Scanner FAB (Floating Vector Graphic) -->
+            <!-- New Event FAB (Floating Action Button) -->
             <div class="relative -top-6 flex justify-center w-full">
-                <button
-                    class="bg-gradient-to-tr from-brand-500 to-accent-500 rounded-full p-4 shadow-xl shadow-brand-500/30 text-white transform hover:-translate-y-1 active:scale-95 transition-all duration-300 border-4 border-[#fafafa] dark:border-[#0f172a]">
+                <a href="{{ route('events.create') }}"
+                    class="bg-gradient-to-tr from-brand-500 to-accent-500 rounded-full p-4 shadow-xl shadow-brand-500/30 text-white transform hover:-translate-y-1 active:scale-95 transition-all duration-300 border-4 border-[#fafafa] dark:border-[#0f172a] flex items-center justify-center">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4">
                         </path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
-                </button>
+                </a>
             </div>
 
             <!-- Wallet -->
@@ -468,15 +481,16 @@
                 <span class="text-[10px] font-bold">Wallet</span>
             </a>
 
-            <!-- Profile -->
-            <a href="{{ route('profile.edit') }}"
-                class="flex flex-col items-center justify-center w-full h-full space-y-1 {{ request()->routeIs('profile.*') ? 'text-brand-600 dark:text-brand-400' : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300' }} transition-colors">
+            <!-- Friends -->
+            <a href="{{ route('friends.index') }}"
+                class="flex flex-col items-center justify-center w-full h-full space-y-1 {{ request()->routeIs('friends.*') ? 'text-brand-600 dark:text-brand-400' : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300' }} transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
-                        stroke-width="{{ request()->routeIs('profile.*') ? '2.5' : '2' }}"
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        stroke-width="{{ request()->routeIs('friends.*') ? '2.5' : '2' }}"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                    </path>
                 </svg>
-                <span class="text-[10px] font-bold">Profile</span>
+                <span class="text-[10px] font-bold">Friends</span>
             </a>
 
         </div>

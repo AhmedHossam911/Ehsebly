@@ -11,6 +11,14 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Legal Pages
+Route::get('/privacy', function () {
+    return view('pages.privacy'); })->name('privacy');
+Route::get('/terms', function () {
+    return view('pages.terms'); })->name('terms');
+Route::get('/contact', function () {
+    return view('pages.contact'); })->name('contact');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class , 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class , 'update'])->name('profile.update');

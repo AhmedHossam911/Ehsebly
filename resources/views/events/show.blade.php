@@ -10,61 +10,7 @@
         </div>
     </x-slot>
 
-    <div class="py-8" x-data="{
-        showExpenseModal: false,
-        splitType: 'equal',
-        customAmounts: {},
-        payers: {},
-        isScanning: false,
-        scanSuccess: false,
-        scanError: null,
-        expenseDescription: '',
-        expenseTotal: '',
-    
-        async handleScan(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-    
-            this.isScanning = true;
-            this.scanSuccess = false;
-            this.scanError = null;
-    
-            const formData = new FormData();
-            formData.append('receipt', file);
-    
-            try {
-                // Fetch requires CSRF token from meta tag
-                const csrfToken = document.querySelector('meta[name=&quot;csrf-token&quot;]').getAttribute('content');
-    
-                const response = await fetch('{{ route('receipts.scan') }}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
-                    },
-                    body: formData
-                });
-    
-                const result = await response.json();
-    
-                if (response.ok && result.success) {
-                    this.expenseDescription = result.data.merchant + ' Receipt';
-                    this.expenseTotal = result.data.total;
-                    this.scanSuccess = true;
-                    setTimeout(() => { this.scanSuccess = false; }, 3000);
-                } else {
-                    this.scanError = result.message || 'Failed to scan receipt. Please input manually.';
-                }
-            } catch (error) {
-                this.scanError = 'An error occurred during scanning.';
-                console.error('OCR Error:', error);
-            } finally {
-                this.isScanning = false;
-                // Reset file input so the same file can be selected again if needed
-                event.target.value = '';
-            }
-        }
-    }">
+    <div class="py-8" x-data="{ showExpenseModal: false, splitType: 'equal', customAmounts: {}, payers: {} }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
             @if (session('status'))
@@ -343,84 +289,6 @@
                                     <div class="flex items-center justify-between mb-6">
                                         <h3 class="text-2xl leading-6 font-black text-gray-900 dark:text-white"
                                             id="modal-title">New Expense</h3>
-
-                                        <!-- Scan Receipt Button -->
-                                        <div>
-                                            <input type="file" x-ref="receiptScanner" accept="image/*"
-                                                capture="environment" class="hidden" @change="handleScan(event)">
-                                            <button type="button" @click="$refs.receiptScanner.click()"
-                                                class="flex items-center space-x-2 px-4 py-2 bg-brand-50 hover:bg-brand-100 dark:bg-brand-900/40 dark:hover:bg-brand-900/60 text-brand-600 dark:text-brand-400 font-bold rounded-xl transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500">
-                                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                                                    stroke="currentColor" stroke-width="2.5">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                </svg>
-                                                <span>Scan Receipt</span>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Scanning Overlay -->
-                                    <div x-show="isScanning" style="display: none;"
-                                        class="absolute inset-0 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center">
-                                        <div class="relative w-24 h-24 mb-6">
-                                            <!-- Scanner Laser Animation -->
-                                            <div
-                                                class="absolute inset-0 border-4 border-brand-200 dark:border-brand-900 rounded-2xl overflow-hidden">
-                                                <div
-                                                    class="w-full h-1 bg-brand-500 shadow-[0_0_15px_rgba(16,185,129,0.8)] animate-[scan_2s_ease-in-out_infinite]">
-                                                </div>
-                                            </div>
-                                            <svg class="w-24 h-24 text-gray-300 dark:text-gray-600 p-4" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    stroke-width="1.5"
-                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
-                                        </div>
-                                        <h4
-                                            class="text-xl font-black text-gray-900 dark:text-white tracking-tight animate-pulse">
-                                            Extracting Data...</h4>
-                                        <p class="text-sm font-medium text-gray-500 mt-2">Our AI is reading your
-                                            receipt</p>
-                                    </div>
-
-                                    <!-- Scan Success Banner -->
-                                    <div x-show="scanSuccess" x-transition style="display: none;"
-                                        class="mb-5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 flex items-start">
-                                        <div class="flex-shrink-0">
-                                            <svg class="h-5 w-5 text-green-400 mt-0.5" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                        </div>
-                                        <div class="ml-3">
-                                            <h3 class="text-sm font-bold text-green-800 dark:text-green-300">Scan
-                                                Complete!</h3>
-                                            <p class="text-sm text-green-700 dark:text-green-400 mt-1">Found amount and
-                                                details. Please review below.</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Scan Error Banner -->
-                                    <div x-show="scanError" style="display: none;"
-                                        class="mb-5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 flex items-start">
-                                        <div class="flex-shrink-0">
-                                            <svg class="h-5 w-5 text-red-400 mt-0.5" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                        </div>
-                                        <div class="ml-3">
-                                            <h3 class="text-sm font-bold text-red-800 dark:text-red-300">Scan Failed
-                                            </h3>
-                                            <p class="text-sm text-red-700 dark:text-red-400 mt-1" x-text="scanError">
-                                            </p>
-                                        </div>
                                     </div>
 
                                     <div class="space-y-5">
@@ -430,7 +298,6 @@
                                                 class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">What
                                                 was it for?</label>
                                             <input type="text" name="description" required
-                                                x-model="expenseDescription"
                                                 class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-brand-500 focus:ring-brand-500 rounded-xl shadow-sm px-4 py-3"
                                                 placeholder="e.g. Dinner, Uber, Tickets">
                                         </div>
@@ -441,7 +308,6 @@
                                                 class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Total
                                                 Amount (EGP)</label>
                                             <input type="number" step="0.01" name="total_amount" required
-                                                x-model="expenseTotal"
                                                 class="w-full font-black text-2xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-brand-500 focus:ring-brand-500 rounded-2xl shadow-sm px-5 py-4 bg-gray-50 text-brand-600 dark:text-brand-400"
                                                 placeholder="0.00">
                                         </div>

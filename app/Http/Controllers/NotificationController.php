@@ -8,7 +8,7 @@ class NotificationController extends Controller
 {
     public function index()
     {
-        $notifications = \App\Models\Notification::where('user_id', auth()->id())->latest()->get();
+        $notifications = auth()->user()->notifications()->latest()->get();
         return view('notifications.index', compact('notifications'));
     }
 
