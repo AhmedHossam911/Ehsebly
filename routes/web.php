@@ -7,9 +7,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 // Legal Pages
 Route::get('/privacy', function () {
@@ -23,6 +23,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class , 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class , 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class , 'destroy'])->name('profile.destroy');
+
+    // Public Profile
+    Route::get('/user/{user:uid}', [\App\Http\Controllers\PublicProfileController::class, 'show'])->name('profile.show');
 
     // Friends & Friend Requests
     Route::get('/friends', [\App\Http\Controllers\FriendController::class , 'index'])->name('friends.index');
@@ -39,6 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/events/{event}/expenses/{expense}/edit', [\App\Http\Controllers\ExpenseController::class , 'edit'])->name('expenses.edit');
     Route::put('/events/{event}/expenses/{expense}', [\App\Http\Controllers\ExpenseController::class , 'update'])->name('expenses.update');
     Route::delete('/events/{event}/expenses/{expense}', [\App\Http\Controllers\ExpenseController::class , 'destroy'])->name('expenses.destroy');
+
+    // Debts
+    Route::get('/debts', [\App\Http\Controllers\DebtController::class, 'index'])->name('debts.index');
 
     // Receipt Scanner
     Route::post('/receipts/scan', [\App\Http\Controllers\ReceiptScannerController::class , 'scan'])->name('receipts.scan');

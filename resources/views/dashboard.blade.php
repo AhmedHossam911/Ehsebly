@@ -71,13 +71,13 @@
 
                         <div class="grid grid-cols-2 gap-4 pt-6 border-t border-white/10">
                             <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-white/5">
-                                <p class="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wider">You Owe</p>
-                                <p class="text-xl font-bold text-white">0.00 EGP</p>
+                                <p class="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wider">To Pay (عليك)</p>
+                                <p class="text-xl font-bold text-white">{{ number_format($youOwe, 2) }} EGP</p>
                             </div>
                             <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-white/5">
-                                <p class="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wider">You are Owed
+                                <p class="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wider">To Receive (ليك)
                                 </p>
-                                <p class="text-xl font-bold text-brand-400 drop-shadow">0.00 EGP</p>
+                                <p class="text-xl font-bold text-brand-400 drop-shadow">{{ number_format($youAreOwed, 2) }} EGP</p>
                             </div>
                         </div>
                     </div>
@@ -227,19 +227,33 @@
                         </a>
 
                         <!-- Action 3 -->
-                        <a href="{{ route('wallet.index') }}" class="flex flex-col items-center group col-span-2">
+                        <a href="{{ route('debts.index') }}" class="flex flex-col items-center group">
                             <div
-                                class="relative h-16 w-full bg-white dark:bg-gray-800 rounded-[1.5rem] shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-center transform group-hover:-translate-y-1 group-hover:shadow-xl transition-all duration-300 overflow-hidden space-x-3">
+                                class="relative h-20 w-full sm:h-24 bg-white dark:bg-gray-800 rounded-[1.5rem] shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-center transform group-hover:-translate-y-1 group-hover:shadow-xl transition-all duration-300 overflow-hidden">
+                                <div
+                                    class="absolute inset-0 bg-red-500 opacity-0 group-hover:opacity-10 transition-opacity">
+                                </div>
+                                <svg class="h-8 w-8 text-red-500 transform group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <span class="text-sm font-bold text-gray-700 dark:text-gray-300 mt-3 text-center">Debts</span>
+                        </a>
+
+                        <!-- Action 4 -->
+                        <a href="{{ route('wallet.index') }}" class="flex flex-col items-center group">
+                            <div
+                                class="relative h-20 w-full sm:h-24 bg-white dark:bg-gray-800 rounded-[1.5rem] shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-center transform group-hover:-translate-y-1 group-hover:shadow-xl transition-all duration-300 overflow-hidden space-x-3">
                                 <div
                                     class="absolute inset-0 bg-orange-500 opacity-0 group-hover:opacity-10 transition-opacity">
                                 </div>
-                                <svg class="h-6 w-6 text-orange-500 transform group-hover:scale-110 transition-transform"
+                                <svg class="h-8 w-8 text-orange-500 transform group-hover:scale-110 transition-transform"
                                     fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                                 </svg>
-                                <span class="text-sm font-bold text-gray-700 dark:text-gray-300">Wallet</span>
                             </div>
+                            <span class="text-sm font-bold text-gray-700 dark:text-gray-300 mt-3 text-center">Wallet</span>
                         </a>
                     </div>
                 </div>

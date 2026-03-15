@@ -13,11 +13,7 @@
                 <div class="p-6">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Add a New Friend</h3>
                     
-                    @if (session('status'))
-                        <div class="bg-indigo-100 border border-indigo-400 text-indigo-700 px-4 py-3 rounded relative mb-4" role="alert">
-                            <span class="block sm:inline">{{ session('status') }}</span>
-                        </div>
-                    @endif
+
 
                     <form action="{{ route('friend-requests.store') }}" method="POST" class="flex gap-4">
                         @csrf

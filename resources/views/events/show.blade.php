@@ -13,22 +13,7 @@
     <div class="py-8" x-data="{ showExpenseModal: false, splitType: 'equal', customAmounts: {}, payers: {} }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-            @if (session('status'))
-                <div class="bg-indigo-100 border border-indigo-400 text-indigo-700 px-4 py-3 rounded-2xl relative"
-                    role="alert">
-                    <span class="block sm:inline">{{ session('status') }}</span>
-                </div>
-            @endif
-            @if ($errors->any())
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-2xl relative"
-                    role="alert">
-                    <ul class="list-disc pl-5">
-                        @foreach ($errors->all() as $err)
-                            <li>{{ $err }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Main Content (Expenses & Debts) -->

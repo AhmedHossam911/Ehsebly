@@ -13,11 +13,7 @@
             <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mt-1">Track your personal income and expenses.</p>
         </div>
 
-        @if (session('status'))
-            <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-3 rounded-2xl relative shadow-sm font-medium" role="alert">
-                <span class="block sm:inline">{{ session('status') }}</span>
-            </div>
-        @endif
+
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
             <!-- Left Column: Balance & Add Transaction -->

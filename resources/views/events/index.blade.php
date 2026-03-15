@@ -26,12 +26,7 @@
             </a>
         </div>
 
-        @if (session('status'))
-            <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-3 rounded-2xl relative shadow-sm font-medium"
-                role="alert">
-                <span class="block sm:inline">{{ session('status') }}</span>
-            </div>
-        @endif
+
 
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-6 relative z-10 w-full">
             @forelse($events as $index => $event)
