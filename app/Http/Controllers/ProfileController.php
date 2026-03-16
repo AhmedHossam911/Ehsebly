@@ -42,16 +42,20 @@ class ProfileController extends Controller
                     $base64 = base64_decode($base64);
 
                     if ($base64 !== false) {
-                        // Generate unique filename
                         $fileName = 'avatars/' . \Illuminate\Support\Str::random(40) . '.' . $type;
+                        $publicPath = public_path('avatars');
+                        
+                        if (!file_exists($publicPath)) {
+                            mkdir($publicPath, 0755, true);
+                        }
 
                         // Delete old avatar if exists
-                        if ($request->user()->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($request->user()->avatar)) {
-                            \Illuminate\Support\Facades\Storage::disk('public')->delete($request->user()->avatar);
+                        if ($request->user()->avatar && file_exists(public_path($request->user()->avatar))) {
+                            unlink(public_path($request->user()->avatar));
                         }
 
                         // Save the new image
-                        \Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $base64);
+                        file_put_contents(public_path($fileName), $base64);
 
                         $data['avatar'] = $fileName;
                     }

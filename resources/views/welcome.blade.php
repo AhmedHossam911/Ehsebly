@@ -199,19 +199,17 @@
                     <div class="mt-10 flex items-center justify-center lg:justify-start space-x-4 animate-fade-in-up"
                         style="animation-delay: 0.4s;">
                         <div class="flex -space-x-3">
-                            <img class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-900"
-                                src="https://ui-avatars.com/api/?name=A&background=random&color=fff" alt="User">
-                            <img class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-900"
-                                src="https://ui-avatars.com/api/?name=M&background=random&color=fff" alt="User">
-                            <img class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-900"
-                                src="https://ui-avatars.com/api/?name=S&background=random&color=fff" alt="User">
-                            <img class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-900"
-                                src="https://ui-avatars.com/api/?name=O&background=random&color=fff" alt="User">
+                            @foreach($avatars as $avatar)
+                            <img class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-900 object-cover"
+                                src="{{ $avatar }}" alt="User">
+                            @endforeach
+                            @if($userCount > 4)
                             <div
                                 class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-900 bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">
-                                +2k</div>
+                                +{{ $userCount > 1000 ? round(($userCount - 4) / 1000, 1) . 'k' : ($userCount - 4) }}</div>
+                            @endif
                         </div>
-                        <p class="text-sm font-semibold text-gray-600 dark:text-gray-400">Trusted by 2,000+ friends in
+                        <p class="text-sm font-semibold text-gray-600 dark:text-gray-400">Trusted by {{ number_format($userCount) }} friends in
                             Egypt</p>
                     </div>
                 </div>

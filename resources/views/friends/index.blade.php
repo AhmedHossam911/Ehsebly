@@ -34,7 +34,7 @@
                     <a href="{{ route('profile.show', $friend->uid) }}" class="relative h-20 w-20 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 p-1 mb-4 shadow-md group-hover:shadow-lg transition-shadow block z-10">
                         <div class="h-full w-full bg-white dark:bg-gray-900 rounded-full flex items-center justify-center overflow-hidden border border-white dark:border-gray-800">
                             @if($friend->avatar)
-                                <img src="{{ asset('storage/' . $friend->avatar) }}" alt="Avatar" class="h-full w-full object-cover">
+                                <img src="{{ $friend->getAvatarUrl() }}" alt="Avatar" class="h-full w-full object-cover">
                             @else
                                 <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-purple-500 to-indigo-600">{{ substr($friend->name, 0, 1) }}</span>
                             @endif

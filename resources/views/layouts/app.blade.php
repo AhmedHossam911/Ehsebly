@@ -382,7 +382,7 @@
                                     <div
                                         class="h-full w-full bg-gradient-to-br from-brand-50 to-brand-100 dark:from-gray-800 dark:to-gray-900 rounded-full flex items-center justify-center border border-white dark:border-gray-800">
                                         @if (auth()->user()->avatar)
-                                            <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="Avatar"
+                                            <img src="{{ auth()->user()->getAvatarUrl() }}" alt="Avatar"
                                                 class="h-full w-full object-cover rounded-full">
                                         @else
                                             <span

@@ -38,7 +38,7 @@
                         <div class="group relative bg-white dark:bg-gray-800 rounded-[1.5rem] p-5 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex items-center justify-between">
                             <div class="flex items-center relative z-10 w-full">
                                 <a href="{{ route('profile.show', $payable->toParticipant->user->uid) }}" class="flex-shrink-0">
-                                    <img src="{{ $payable->toParticipant->user->avatar ? asset('storage/' . $payable->toParticipant->user->avatar) : 'https://ui-avatars.com/api/?name='.urlencode($payable->toParticipant->user->name ?? $payable->toParticipant->guest_name).'&background=random' }}" alt="Avatar" class="h-12 w-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-md mr-4 hover:opacity-80 transition-opacity">
+                                    <img src="{{ $payable->toParticipant->user ? $payable->toParticipant->user->getAvatarUrl() : 'https://ui-avatars.com/api/?name='.urlencode($payable->toParticipant->guest_name).'&background=random' }}" alt="Avatar" class="h-12 w-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-md mr-4 hover:opacity-80 transition-opacity">
                                 </a>
                                 
                                 <div class="flex-grow">
@@ -85,7 +85,7 @@
                         <div class="group relative bg-white dark:bg-gray-800 rounded-[1.5rem] p-5 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex items-center justify-between">
                             <div class="flex items-center relative z-10 w-full">
                                 <a href="{{ route('profile.show', $receivable->fromParticipant->user->uid) }}" class="flex-shrink-0">
-                                    <img src="{{ $receivable->fromParticipant->user->avatar ? asset('storage/' . $receivable->fromParticipant->user->avatar) : 'https://ui-avatars.com/api/?name='.urlencode($receivable->fromParticipant->user->name ?? $receivable->fromParticipant->guest_name).'&background=random' }}" alt="Avatar" class="h-12 w-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-md mr-4 hover:opacity-80 transition-opacity">
+                                    <img src="{{ $receivable->fromParticipant->user ? $receivable->fromParticipant->user->getAvatarUrl() : 'https://ui-avatars.com/api/?name='.urlencode($receivable->fromParticipant->guest_name).'&background=random' }}" alt="Avatar" class="h-12 w-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-md mr-4 hover:opacity-80 transition-opacity">
                                 </a>                                
                                 <div class="flex-grow">
                                     <a href="{{ route('profile.show', $receivable->fromParticipant->user->uid) }}" class="hover:underline">

@@ -4,7 +4,30 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $userCount = \App\Models\User::count();
+    $avatars = \App\Models\User::whereNotNull('avatar_url')
+        ->inRandomOrder()
+        ->limit(4)
+        ->pluck('avatar_url');
+
+    if ($avatars->count() < 4) {
+        $needed = 4 - $avatars->count();
+        $fallbackAvatars = \App\Models\User::whereNull('avatar_url')
+            ->inRandomOrder()
+            ->limit($needed)
+            ->get()
+            ->map(function ($user) {
+                return 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=random&color=fff';
+            });
+        
+        $avatars = $avatars->concat($fallbackAvatars);
+    }
+    
+    while ($avatars->count() < 4) {
+        $avatars->push('https://ui-avatars.com/api/?name=' . urlencode('User ' . $avatars->count()) . '&background=random&color=fff');
+    }
+
+    return view('welcome', compact('userCount', 'avatars'));
 });
 
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])

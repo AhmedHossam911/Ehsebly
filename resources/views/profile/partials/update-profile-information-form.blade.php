@@ -32,7 +32,7 @@
                     <template x-if="!finalImageUrl">
                         <div class="h-full w-full bg-gradient-to-br from-brand-100 to-brand-50 dark:from-gray-800 dark:to-gray-900 rounded-full flex items-center justify-center">
                             @if($user->avatar)
-                                <img src="{{ asset('storage/' . $user->avatar) }}" class="h-full w-full object-cover rounded-full" alt="Avatar">
+                                <img src="{{ $user->getAvatarUrl() }}" class="h-full w-full object-cover rounded-full" alt="Avatar">
                             @else
                                 <span class="text-4xl font-black bg-clip-text text-transparent bg-gradient-to-br from-brand-500 to-accent-600">{{ substr($user->name, 0, 1) }}</span>
                             @endif

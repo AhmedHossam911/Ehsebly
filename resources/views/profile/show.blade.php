@@ -68,7 +68,7 @@
                 <div class="relative -mt-20 mb-6 flex flex-col md:flex-row md:items-end justify-between items-center z-10">
                     <div class="flex flex-col items-center md:items-start">
                         <div class="h-40 w-40 rounded-full border-8 border-white dark:border-gray-800 overflow-hidden bg-white shadow-xl">
-                            <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name='.urlencode($user->name).'&background=random&size=256' }}" alt="{{ $user->name }}" class="h-full w-full object-cover">
+                            <img src="{{ $user->getAvatarUrl() }}" alt="{{ $user->name }}" class="h-full w-full object-cover">
                         </div>
                     </div>
                 </div>

@@ -89,4 +89,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(WalletTransaction::class);
     }
+
+    public function getAvatarUrl()
+    {
+        if ($this->avatar) {
+            if (filter_var($this->avatar, FILTER_VALIDATE_URL)) {
+                return $this->avatar;
+            }
+            return asset($this->avatar);
+        }
+        
+        if ($this->avatar_url) {
+            return $this->avatar_url;
+        }
+
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=random&color=fff';
+    }
 }
