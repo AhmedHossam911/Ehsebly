@@ -41,7 +41,7 @@
                 @else
                     <form action="{{ route('friend-requests.store') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="friend_uid" value="{{ $user->uid }}">
+                        <input type="hidden" name="identifier" value="{{ $user->uid }}">
                         <button type="submit" class="px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-sm font-bold hover:shadow-lg transition-all flex items-center">
                             <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
@@ -142,6 +142,108 @@
 
             </div>
         </div>
+
+        @if(auth()->id() !== $user->id && auth()->user()->friends->contains($user->id))
+            @php
+                $ledgerTransactions = \App\Models\FriendTransaction::between(auth()->id(), $user->id)
+                    ->latest('date')
+                    ->latest('id')
+                    ->get();
+                $totalLent = $ledgerTransactions->where('lender_id', auth()->id())->sum('amount');
+                $totalBorrowed = $ledgerTransactions->where('lender_id', $user->id)->sum('amount');
+                $ledgerBalance = $totalLent - $totalBorrowed;
+            @endphp
+
+            <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-700 p-8 space-y-8">
+                <h3 class="text-2xl font-black text-gray-900 dark:text-white">Ledger with {{ explode(' ', $user->name)[0] }}</h3>
+
+                <!-- Balance Summary -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="p-5 rounded-2xl {{ $ledgerBalance > 0 ? 'bg-green-50 dark:bg-green-900/20' : ($ledgerBalance < 0 ? 'bg-red-50 dark:bg-red-900/20' : 'bg-gray-50 dark:bg-gray-900/30') }}">
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Current Balance</p>
+                        @if($ledgerBalance > 0)
+                            <p class="text-xl font-black text-green-600 dark:text-green-400">{{ explode(' ', $user->name)[0] }} owes you {{ number_format($ledgerBalance, 2) }} EGP</p>
+                        @elseif($ledgerBalance < 0)
+                            <p class="text-xl font-black text-red-600 dark:text-red-400">You owe {{ explode(' ', $user->name)[0] }} {{ number_format(abs($ledgerBalance), 2) }} EGP</p>
+                        @else
+                            <p class="text-xl font-black text-gray-700 dark:text-gray-300">All settled up</p>
+                        @endif
+                    </div>
+                    <div class="p-5 rounded-2xl bg-gray-50 dark:bg-gray-900/30">
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Total Lent</p>
+                        <p class="text-xl font-black text-gray-900 dark:text-white">{{ number_format($totalLent, 2) }} EGP</p>
+                    </div>
+                    <div class="p-5 rounded-2xl bg-gray-50 dark:bg-gray-900/30">
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Total Borrowed</p>
+                        <p class="text-xl font-black text-gray-900 dark:text-white">{{ number_format($totalBorrowed, 2) }} EGP</p>
+                    </div>
+                </div>
+
+                <!-- Add Transaction Form -->
+                <form action="{{ route('friends.ledger.store', $user) }}" method="POST" class="bg-gray-50 dark:bg-gray-900/50 p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+                    @csrf
+                    <div class="lg:col-span-1">
+                        <x-input-label for="direction" value="Direction" />
+                        <select id="direction" name="direction" required class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-brand-500 focus:ring-brand-500">
+                            <option value="lent">I paid for {{ explode(' ', $user->name)[0] }}</option>
+                            <option value="borrowed">{{ explode(' ', $user->name)[0] }} paid for me</option>
+                        </select>
+                    </div>
+                    <div class="lg:col-span-1">
+                        <x-input-label for="amount" value="Amount (EGP)" />
+                        <x-text-input id="amount" name="amount" type="number" step="0.01" min="0.01" class="mt-1 block w-full rounded-xl" required />
+                    </div>
+                    <div class="lg:col-span-1">
+                        <x-input-label for="date" value="Date" />
+                        <x-text-input id="date" name="date" type="date" class="mt-1 block w-full rounded-xl" value="{{ now()->format('Y-m-d') }}" required />
+                    </div>
+                    <div class="lg:col-span-1">
+                        <x-input-label for="description" value="Description (optional)" />
+                        <x-text-input id="description" name="description" type="text" class="mt-1 block w-full rounded-xl" placeholder="e.g. Lunch" />
+                    </div>
+                    <div class="lg:col-span-1">
+                        <x-primary-button class="w-full justify-center rounded-xl py-2.5">Add Transaction</x-primary-button>
+                    </div>
+                </form>
+
+                <!-- Transactions History -->
+                <div class="space-y-3">
+                    @forelse($ledgerTransactions as $transaction)
+                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-700/50">
+                            <div>
+                                <p class="text-sm font-bold text-gray-900 dark:text-white">
+                                    {{ $transaction->lender_id === auth()->id() ? 'You' : explode(' ', $user->name)[0] }}
+                                    lent
+                                    {{ $transaction->borrower_id === auth()->id() ? 'you' : explode(' ', $user->name)[0] }}
+                                </p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                    {{ \Carbon\Carbon::parse($transaction->date)->format('M d, Y') }}
+                                    @if($transaction->description)
+                                        &middot; {{ $transaction->description }}
+                                    @endif
+                                </p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <p class="font-black text-gray-900 dark:text-white">{{ number_format($transaction->amount, 2) }} <span class="text-xs">EGP</span></p>
+                                <form action="{{ route('friends.ledger.destroy', $transaction) }}" method="POST" onsubmit="return confirm('Delete this transaction?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-500 hover:text-red-700 p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition" title="Delete Transaction">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center py-8 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700">
+                            <p class="text-gray-500 dark:text-gray-400 font-medium">No transactions yet.</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        @endif
 
     </div>
 </x-app-layout>

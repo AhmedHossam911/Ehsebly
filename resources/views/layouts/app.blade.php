@@ -144,6 +144,17 @@
                     <span :class="sidebarExpanded ? 'opacity-100 delay-100' : 'opacity-0 xl:group-hover:opacity-100'" class="ml-4 whitespace-nowrap transition-opacity duration-200">Events</span>
                 </a>
 
+                <a href="{{ route('debts.index') }}" title="Debts"
+                    class="flex items-center px-4 py-3 rounded-2xl transition-all duration-300 overflow-hidden {{ request()->routeIs('debts.*') ? 'bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white font-semibold' }}">
+                    <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="{{ request()->routeIs('debts.*') ? '2.5' : '2' }}"
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                        </path>
+                    </svg>
+                    <span :class="sidebarExpanded ? 'opacity-100 delay-100' : 'opacity-0 xl:group-hover:opacity-100'" class="ml-4 whitespace-nowrap transition-opacity duration-200">Debts</span>
+                </a>
+
                 <a href="{{ route('wallet.index') }}" title="Wallet"
                     class="flex items-center px-4 py-3 rounded-2xl transition-all duration-300 overflow-hidden {{ request()->routeIs('wallet.*') ? 'bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white font-semibold' }}">
                     <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -153,6 +164,17 @@
                         </path>
                     </svg>
                     <span :class="sidebarExpanded ? 'opacity-100 delay-100' : 'opacity-0 xl:group-hover:opacity-100'" class="ml-4 whitespace-nowrap transition-opacity duration-200">Wallet</span>
+                </a>
+
+                <a href="{{ route('recurring-payments.index') }}" title="Recurring Payments"
+                    class="flex items-center px-4 py-3 rounded-2xl transition-all duration-300 overflow-hidden {{ request()->routeIs('recurring-payments.*') ? 'bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white font-semibold' }}">
+                    <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="{{ request()->routeIs('recurring-payments.*') ? '2.5' : '2' }}"
+                            d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z">
+                        </path>
+                    </svg>
+                    <span :class="sidebarExpanded ? 'opacity-100 delay-100' : 'opacity-0 xl:group-hover:opacity-100'" class="ml-4 whitespace-nowrap transition-opacity duration-200">Recurring</span>
                 </a>
 
                 <a href="{{ route('friends.index') }}" title="Friends"
@@ -609,6 +631,33 @@
     @endif
 
     <!-- Unified Alpine.js script handles theme completely above -->
+    
+    <!-- Global Form Loading Spinner -->
+    <script>
+        document.addEventListener('submit', function(e) {
+            if (e.defaultPrevented) return;
+
+            const form = e.target;
+            if (!form || form.tagName !== 'FORM') return;
+
+            if (form.hasAttribute('data-submitting')) {
+                e.preventDefault();
+                return;
+            }
+
+            form.setAttribute('data-submitting', 'true');
+            const btn = form.querySelector('button[type="submit"]');
+            
+            if (btn) {
+                const w = btn.offsetWidth;
+                if (w > 0) btn.style.width = w + 'px';
+                
+                // Use pointer-events-none instead of disabled to avoid breaking form submission in some browsers
+                btn.classList.add('opacity-80', 'cursor-not-allowed', 'pointer-events-none', 'flex', 'items-center', 'justify-center', 'transition-all');
+                btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+            }
+        });
+    </script>
 </body>
 
 </html>

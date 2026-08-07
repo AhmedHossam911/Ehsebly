@@ -43,7 +43,7 @@
                         <!-- Total Amount -->
                         <div>
                             <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Total Amount
-                                (EGP)</label>
+                                ({{ $event->currency }})</label>
                             <input type="number" step="0.01" name="total_amount" required
                                 value="{{ old('total_amount', $expense->total_amount) }}"
                                 class="w-full font-black text-2xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-brand-500 focus:ring-brand-500 rounded-2xl shadow-sm px-5 py-4 bg-gray-50 text-brand-600 dark:text-brand-400">

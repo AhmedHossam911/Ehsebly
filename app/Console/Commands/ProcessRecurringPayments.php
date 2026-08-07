@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 
 class ProcessRecurringPayments extends Command
 {
+    // TODO: Partially implemented — this command is not registered in the schedule
+    // (routes/console.php), so recurring payments are never processed automatically.
     protected $signature = 'payments:process-recurring';
     protected $description = 'Process all due recurring payments and log them to wallets';
 

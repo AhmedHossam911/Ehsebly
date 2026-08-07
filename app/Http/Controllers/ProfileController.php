@@ -43,19 +43,18 @@ class ProfileController extends Controller
 
                     if ($base64 !== false) {
                         $fileName = 'avatars/' . \Illuminate\Support\Str::random(40) . '.' . $type;
-                        $publicPath = public_path('avatars');
                         
-                        if (!file_exists($publicPath)) {
-                            mkdir($publicPath, 0755, true);
-                        }
+                        // Use Laravel's Storage facade which is guaranteed to work regardless of webroot path
+                        \Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $base64);
 
                         // Delete old avatar if exists
-                        if ($request->user()->avatar && file_exists(public_path($request->user()->avatar))) {
-                            unlink(public_path($request->user()->avatar));
+                        try {
+                            if ($request->user()->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($request->user()->avatar)) {
+                                \Illuminate\Support\Facades\Storage::disk('public')->delete($request->user()->avatar);
+                            }
+                        } catch (\Exception $e) {
+                            // Ignore deletion errors
                         }
-
-                        // Save the new image
-                        file_put_contents(public_path($fileName), $base64);
 
                         $data['avatar'] = $fileName;
                     }

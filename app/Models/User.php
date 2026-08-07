@@ -90,13 +90,20 @@ class User extends Authenticatable
         return $this->hasMany(WalletTransaction::class);
     }
 
+    public function recurringPayments()
+    {
+        return $this->hasMany(RecurringPayment::class);
+    }
+
     public function getAvatarUrl()
     {
         if ($this->avatar) {
             if (filter_var($this->avatar, FILTER_VALIDATE_URL)) {
                 return $this->avatar;
             }
-            return asset($this->avatar);
+            
+            // Serve directly from storage route bypassing file system constraints
+            return route('avatar.file', ['filename' => $this->avatar]);
         }
         
         if ($this->avatar_url) {

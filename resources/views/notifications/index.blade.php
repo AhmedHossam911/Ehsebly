@@ -81,24 +81,15 @@
                     @endif
                 </div>
             @empty
-                <div
-                    class="text-center py-20 bg-white dark:bg-gray-800 rounded-[2.5rem] border border-dashed border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden">
-                    <div class="absolute inset-0 bg-brand-50 dark:bg-brand-900/10 opacity-50"></div>
-                    <div class="relative z-10 flex flex-col items-center">
-                        <div
-                            class="h-24 w-24 bg-brand-50 dark:bg-gray-900 rounded-full flex items-center justify-center mb-6 shadow-inner border border-brand-100 dark:border-gray-800">
-                            <svg class="h-12 w-12 text-brand-400 dark:text-brand-600" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">All caught up!
-                        </h3>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">You don't have any new
-                            notifications to review right now.</p>
-                    </div>
-                </div>
+                <x-empty-state title="All caught up!"
+                    description="You don't have any new notifications to review right now.">
+                    <x-slot name="icon">
+                        <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                    </x-slot>
+                </x-empty-state>
             @endforelse
         </div>
 

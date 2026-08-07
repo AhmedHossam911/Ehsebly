@@ -6,6 +6,18 @@ use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
 {
+    // Organizers can manage any expense; other participants can only manage expenses they paid for.
+    private function canManageExpense(\App\Models\Event $event, \App\Models\Expense $expense)
+    {
+        if ($event->isOrganizer(auth()->id())) {
+            return true;
+        }
+
+        $expense->loadMissing('payers.participant');
+
+        return $expense->payers->contains(fn($payer) => $payer->participant->user_id === auth()->id());
+    }
+
     public function store(Request $request, \App\Models\Event $event)
     {
         // Must be a participant or creator
@@ -99,9 +111,8 @@ class ExpenseController extends Controller
             return back()->withErrors(['expense' => 'Cannot modify expenses. Payments have already started.']);
         }
 
-        // Must be creator or part of the expense payers to edit it (or just participant if we allow open editing)
-        $isParticipant = $event->participants->contains('user_id', auth()->id());
-        if (!$isParticipant && $event->creator_id !== auth()->id()) {
+        // Only organizers, or the participants who paid for this expense, may edit it
+        if (!$this->canManageExpense($event, $expense)) {
             abort(403);
         }
 
@@ -117,8 +128,8 @@ class ExpenseController extends Controller
             return back()->withErrors(['expense' => 'Cannot modify expenses. Payments have already started.']);
         }
 
-        $isParticipant = $event->participants->contains('user_id', auth()->id());
-        if (!$isParticipant && $event->creator_id !== auth()->id()) {
+        // Only organizers, or the participants who paid for this expense, may edit it
+        if (!$this->canManageExpense($event, $expense)) {
             abort(403);
         }
 
@@ -189,6 +200,11 @@ class ExpenseController extends Controller
     {
         if ($event->isLocked()) {
             return back()->withErrors(['expense' => 'Cannot modify expenses. Payments have already started.']);
+        }
+
+        // Only organizers, or the participants who paid for this expense, may delete it
+        if (!$this->canManageExpense($event, $expense)) {
+            abort(403);
         }
 
         $expense->delete();

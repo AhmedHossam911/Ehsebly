@@ -2,20 +2,16 @@
     <div class="py-10 px-4 max-w-7xl mx-auto sm:px-6 lg:px-12 xl:px-16 space-y-10 w-full mb-10">
 
         <!-- Header Area -->
-        <div class="flex justify-between items-center bg-transparent relative z-10 mb-8">
-            <div>
-                <h2 class="text-3xl font-black tracking-tight text-gray-900 dark:text-white">Your Debts</h2>
-                <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 mt-2">Manage everything you owe and are owed</p>
-            </div>
-            <div>
+        <x-page-header title="Your Debts" description="Manage everything you owe and are owed" class="mb-8">
+            <x-slot name="action">
                 <a href="{{ route('dashboard') }}" class="text-sm font-bold text-gray-600 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 flex items-center group bg-white dark:bg-gray-800 px-4 py-2 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-all">
                     <svg class="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                     Back to Dashboard
                 </a>
-            </div>
-        </div>
+            </x-slot>
+        </x-page-header>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 w-full">
 
@@ -48,7 +44,7 @@
                                     <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Event: {{ $payable->event->name }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-lg font-black text-red-500">{{ number_format($payable->amount, 2) }} <span class="text-xs font-bold text-gray-400">EGP</span></p>
+                                    <p class="text-lg font-black text-red-500">{{ number_format($payable->amount, 2) }} <span class="text-xs font-bold text-gray-400">{{ $payable->event->currency ?? 'EGP' }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +90,7 @@
                                     <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Event: {{ $receivable->event->name }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-lg font-black text-brand-500">{{ number_format($receivable->amount, 2) }} <span class="text-xs font-bold text-gray-400">EGP</span></p>
+                                    <p class="text-lg font-black text-brand-500">{{ number_format($receivable->amount, 2) }} <span class="text-xs font-bold text-gray-400">{{ $receivable->event->currency ?? 'EGP' }}</span></p>
                                 </div>
                             </div>
                         </div>

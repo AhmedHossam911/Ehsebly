@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto flex flex-col items-center justify-center px-6">
         <p class="font-medium mb-4">
             &copy; {{ date('Y') }} <strong>Ehsebly</strong>. All rights reserved for <a
-                href="https://linktr.ee/Ahmed_911" target="_blank">Ahmed Hossam</a>.
+                href="https://ahmed-hossam.great-site.net/" target="_blank">Ahmed Hossam</a>.
         </p>
         <div class="flex space-x-6 text-sm font-medium">
             <a href="{{ route('privacy') }}" class="hover:text-brand-500 transition-colors">Privacy</a>

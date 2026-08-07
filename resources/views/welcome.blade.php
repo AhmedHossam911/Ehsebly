@@ -290,15 +290,20 @@
                     <!-- Floating Card Behind (Vector decoration) -->
                     <div
                         class="absolute -right-12 top-20 w-64 h-48 bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-[2rem] border border-white dark:border-gray-700 shadow-xl p-5 animate-float-delayed z-10 transform rotate-6 hidden sm:block">
-                        <div class="flex items-center space-x-3 mb-4">
-                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center pb-0.5">
-                                <span class="text-2xl">📸</span>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center pb-0.5">
+                                    <span class="text-2xl">📸</span>
+                                </div>
+                                <h4 class="font-bold text-gray-900 dark:text-white">Smart OCR</h4>
                             </div>
-                            <h4 class="font-bold text-gray-900 dark:text-white">Smart OCR</h4>
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">Coming
+                                Soon</span>
                         </div>
                         <p class="text-sm text-gray-600 dark:text-gray-300 font-medium mb-3">Snap a photo of the
                             receipt to automatically extract items.</p>
-                        <div class="w-full h-8 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+                        <div class="w-full h-8 bg-gray-100 dark:bg-gray-700 rounded-lg"></div>
                     </div>
 
                 </div>
@@ -348,9 +353,9 @@
                         </div>
                         <h4 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 tracking-tight">Track Expenses
                         </h4>
-                        <p class="text-gray-600 dark:text-gray-400 font-medium leading-relaxed">Add expenses manually
-                            or use our smart OCR to scan receipts. We'll automatically split the costs equally or
-                            exactly.</p>
+                        <p class="text-gray-600 dark:text-gray-400 font-medium leading-relaxed">Add expenses manually,
+                            with smart OCR receipt scanning coming soon. We'll automatically split the costs equally
+                            or exactly.</p>
                     </div>
 
                     <!-- Feature 3 -->
@@ -392,6 +397,32 @@
 
     </div>
 
+    <!-- Global Form Loading Spinner -->
+    <script>
+        document.addEventListener('submit', function(e) {
+            if (e.defaultPrevented) return;
+
+            const form = e.target;
+            if (!form || form.tagName !== 'FORM') return;
+
+            if (form.hasAttribute('data-submitting')) {
+                e.preventDefault();
+                return;
+            }
+
+            form.setAttribute('data-submitting', 'true');
+            const btn = form.querySelector('button[type="submit"]');
+            
+            if (btn) {
+                const w = btn.offsetWidth;
+                if (w > 0) btn.style.width = w + 'px';
+                
+                // Use pointer-events-none instead of disabled to avoid breaking form submission in some browsers
+                btn.classList.add('opacity-80', 'cursor-not-allowed', 'pointer-events-none', 'flex', 'items-center', 'justify-center', 'transition-all');
+                btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+            }
+        });
+    </script>
 </body>
 
 </html>

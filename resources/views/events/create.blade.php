@@ -45,6 +45,28 @@
                             <x-input-error :messages="$errors->get('date')" class="mt-2" />
                         </div>
 
+                        <div>
+                            <label for="budget"
+                                class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">{{ __('Budget (Optional)') }}</label>
+                            <input id="budget"
+                                class="block w-full rounded-2xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-white focus:border-brand-500 focus:ring-brand-500 shadow-sm px-4 py-3 text-base"
+                                type="number" step="0.01" min="0.01" name="budget" value="{{ old('budget') }}"
+                                placeholder="e.g. 5000" />
+                            <x-input-error :messages="$errors->get('budget')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <label for="currency"
+                                class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">{{ __('Currency') }}</label>
+                            <select id="currency" name="currency"
+                                class="block w-full rounded-2xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-white focus:border-brand-500 focus:ring-brand-500 shadow-sm px-4 py-3 text-base">
+                                @foreach (\App\Models\Event::SUPPORTED_CURRENCIES as $currency)
+                                    <option value="{{ $currency }}" {{ old('currency', 'EGP') === $currency ? 'selected' : '' }}>{{ $currency }}</option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('currency')" class="mt-2" />
+                        </div>
+
                         <div
                             class="flex items-center justify-end pt-6 mt-6 border-t border-gray-100 dark:border-gray-700">
                             <a class="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-lg px-4 py-2 transition-colors mr-3"

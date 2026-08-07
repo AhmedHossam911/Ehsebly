@@ -72,12 +72,20 @@
                         <div class="grid grid-cols-2 gap-4 pt-6 border-t border-white/10">
                             <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-white/5">
                                 <p class="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wider">To Pay (عليك)</p>
-                                <p class="text-xl font-bold text-white">{{ number_format($youOwe, 2) }} EGP</p>
+                                @forelse($youOwe as $currency => $amount)
+                                    <p class="text-xl font-bold text-white">{{ number_format($amount, 2) }} {{ $currency }}</p>
+                                @empty
+                                    <p class="text-xl font-bold text-white">0.00 EGP</p>
+                                @endforelse
                             </div>
                             <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-white/5">
                                 <p class="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wider">To Receive (ليك)
                                 </p>
-                                <p class="text-xl font-bold text-brand-400 drop-shadow">{{ number_format($youAreOwed, 2) }} EGP</p>
+                                @forelse($youAreOwed as $currency => $amount)
+                                    <p class="text-xl font-bold text-brand-400 drop-shadow">{{ number_format($amount, 2) }} {{ $currency }}</p>
+                                @empty
+                                    <p class="text-xl font-bold text-brand-400 drop-shadow">0.00 EGP</p>
+                                @endforelse
                             </div>
                         </div>
                     </div>
@@ -156,27 +164,20 @@
                                 </div>
                             </a>
                         @empty
-                            <div
-                                class="p-8 bg-white dark:bg-gray-800 rounded-3xl border border-dashed border-gray-300 dark:border-gray-700 text-center relative overflow-hidden lg:col-span-2 xl:col-span-3">
-                                <div class="absolute inset-0 bg-brand-50 dark:bg-brand-900/10 opacity-50"></div>
-                                <div class="relative z-10 flex flex-col items-center">
-                                    <div
-                                        class="w-16 h-16 bg-brand-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-brand-500 mb-4">
-                                        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                        </svg>
-                                    </div>
-                                    <p class="text-gray-900 dark:text-white font-bold text-lg mb-1">No recent outings.
-                                    </p>
-                                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Start by creating an event
-                                        with
-                                        your friends.</p>
+                            <x-empty-state title="No recent outings" class="lg:col-span-2 xl:col-span-3"
+                                description="Start by creating an event with your friends.">
+                                <x-slot name="icon">
+                                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                </x-slot>
+                                <x-slot name="action">
                                     <a href="{{ route('events.create') }}"
                                         class="px-6 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-full text-sm hover:shadow-lg transform hover:-translate-y-0.5 transition-all">Create
                                         an event</a>
-                                </div>
-                            </div>
+                                </x-slot>
+                            </x-empty-state>
                         @endforelse
                     </div>
                 </div>

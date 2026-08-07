@@ -8,17 +8,15 @@
     <div class="py-8 px-4 max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8 mb-10">
         
         <!-- Header Actions -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
-            <div>
-                <h1 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">Your Friends List</h1>
-                <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mt-1">Manage connections to easily split expenses.</p>
-            </div>
-            <a href="{{ route('friend-requests.index') }}" class="group relative inline-flex items-center justify-center px-6 py-3 font-bold text-white transition-all duration-200 bg-purple-600 border border-transparent rounded-2xl hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 shadow-lg shadow-purple-500/30 overflow-hidden transform hover:-translate-y-0.5">
-                <div class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></div>
-                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                <span class="relative">Friend Requests</span>
-            </a>
-        </div>
+        <x-page-header title="Your Friends List" description="Manage connections to easily split expenses.">
+            <x-slot name="action">
+                <a href="{{ route('friend-requests.index') }}" class="group relative inline-flex items-center justify-center px-6 py-3 font-bold text-white transition-all duration-200 bg-purple-600 border border-transparent rounded-2xl hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 shadow-lg shadow-purple-500/30 overflow-hidden transform hover:-translate-y-0.5">
+                    <div class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></div>
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    <span class="relative">Friend Requests</span>
+                </a>
+            </x-slot>
+        </x-page-header>
 
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
@@ -80,16 +78,15 @@
 
                 </div>
             @empty
-                <div class="col-span-full py-16 flex flex-col items-center justify-center bg-transparent border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-[2.5rem] relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-purple-50 dark:bg-purple-900/10 opacity-50"></div>
-                    <div class="relative z-10 flex flex-col items-center">
-                        <div class="w-20 h-20 bg-purple-100 dark:bg-gray-800 rounded-3xl flex items-center justify-center text-purple-500 mb-6 shadow-inner transform group-hover:scale-105 transition-transform">
-                            <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                        </div>
-                        <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">No Friends Yet</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-center max-w-sm font-medium">Add friends to easily split bills without asking for their InstaPay details every time.</p>
-                    </div>
-                </div>
+                <x-empty-state title="No Friends Yet" color="purple" class="col-span-full"
+                    description="Add friends to easily split bills without asking for their InstaPay details every time.">
+                    <x-slot name="icon">
+                        <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </x-slot>
+                </x-empty-state>
             @endforelse
         </div>
     </div>

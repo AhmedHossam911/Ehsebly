@@ -8,23 +8,20 @@
     <div class="py-8 px-4 w-full max-w-[95%] mx-auto sm:px-6 lg:px-8 space-y-8 mb-10">
 
         <!-- Header Actions -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
-            <div>
-                <h1 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">Your Events</h1>
-                <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mt-1">Manage outings, trips, and shared
-                    expenses.</p>
-            </div>
-            <a href="{{ route('events.create') }}"
-                class="group relative inline-flex items-center justify-center px-6 py-3 font-bold text-white transition-all duration-200 bg-brand-500 border border-transparent rounded-2xl hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 shadow-lg shadow-brand-500/30 overflow-hidden transform hover:-translate-y-0.5">
-                <div
-                    class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black">
-                </div>
-                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
-                <span class="relative">New Event</span>
-            </a>
-        </div>
+        <x-page-header title="Your Events" description="Manage outings, trips, and shared expenses.">
+            <x-slot name="action">
+                <a href="{{ route('events.create') }}"
+                    class="group relative inline-flex items-center justify-center px-6 py-3 font-bold text-white transition-all duration-200 bg-brand-500 border border-transparent rounded-2xl hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 shadow-lg shadow-brand-500/30 overflow-hidden transform hover:-translate-y-0.5">
+                    <div
+                        class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black">
+                    </div>
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span class="relative">New Event</span>
+                </a>
+            </x-slot>
+        </x-page-header>
 
 
 
@@ -65,8 +62,12 @@
                                 </svg>
                             </div>
 
-                            <!-- Participants Pills -->
+                            <!-- Currency & Participants Pills -->
                             <div class="flex items-center space-x-2">
+                                <div
+                                    class="bg-gray-50/80 dark:bg-gray-700/50 backdrop-blur-md text-gray-500 dark:text-gray-400 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm ring-1 ring-gray-900/5 dark:ring-white/10">
+                                    {{ $event->currency }}
+                                </div>
                                 <div
                                     class="bg-gray-50/80 dark:bg-gray-700/50 backdrop-blur-md text-gray-700 dark:text-gray-200 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm ring-1 ring-gray-900/5 dark:ring-white/10 flex items-center">
                                     <svg class="w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24"
@@ -124,27 +125,21 @@
                     </div>
                 </a>
             @empty
-                <div
-                    class="col-span-full py-16 flex flex-col items-center justify-center bg-transparent border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-[2.5rem] relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-brand-50 dark:bg-brand-900/10 opacity-50"></div>
-                    <div class="relative z-10 flex flex-col items-center">
-                        <div
-                            class="w-20 h-20 bg-brand-100 dark:bg-gray-800 rounded-3xl flex items-center justify-center text-brand-500 mb-6 shadow-inner transform group-hover:scale-105 transition-transform">
-                            <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">No Events Yet
-                        </h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-center max-w-sm mb-8 font-medium">Create your
-                            first event to start logging expenses and effortlessly settling debts with friends.</p>
+                <x-empty-state title="No Events Yet" class="col-span-full"
+                    description="Create your first event to start logging expenses and effortlessly settling debts with friends.">
+                    <x-slot name="icon">
+                        <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                    </x-slot>
+                    <x-slot name="action">
                         <a href="{{ route('events.create') }}"
                             class="px-8 py-3.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all">
                             Create First Event
                         </a>
-                    </div>
-                </div>
+                    </x-slot>
+                </x-empty-state>
             @endforelse
         </div>
     </div>

@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $fillable = ['name', 'creator_id', 'date', 'guest_token'];
+    protected $fillable = ['name', 'creator_id', 'date', 'guest_token', 'currency', 'budget'];
+
+    public const SUPPORTED_CURRENCIES = ['EGP', 'USD', 'EUR', 'GBP', 'SAR', 'AED'];
 
     protected static function boot()
     {
@@ -44,5 +46,21 @@ class Event extends Model
         return $this->settlements()
             ->whereIn('status', [\App\Models\Settlement::STATUS_PAID, \App\Models\Settlement::STATUS_CONFIRMED])
             ->exists();
+    }
+
+    public function totalSpent()
+    {
+        return $this->expenses()->sum('total_amount');
+    }
+
+    public function isOrganizer($userId)
+    {
+        if ($this->creator_id === $userId) {
+            return true;
+        }
+
+        return $this->participants
+            ->where('user_id', $userId)
+            ->contains(fn($participant) => $participant->isOrganizer());
     }
 }

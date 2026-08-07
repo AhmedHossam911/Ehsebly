@@ -8,10 +8,15 @@
     <div class="py-8 px-4 max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8 mb-10">
         
         <!-- Header area (Desktop mostly, mobile handled by app-layout title) -->
-        <div class="hidden md:block relative z-10 mb-6">
-            <h1 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">Your Wallet</h1>
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mt-1">Track your personal income and expenses.</p>
-        </div>
+        <x-page-header title="Your Wallet" description="Track your personal income and expenses."
+            class="hidden md:flex mb-6">
+            <x-slot name="action">
+                <a href="{{ route('recurring-payments.index') }}"
+                    class="text-sm font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-4 py-2.5 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors">
+                    Manage Recurring Payments
+                </a>
+            </x-slot>
+        </x-page-header>
 
 
 
@@ -135,13 +140,15 @@
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center py-16 flex flex-col items-center">
-                                <div class="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-3xl flex items-center justify-center text-gray-400 mb-6 shadow-inner">
-                                    <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                                </div>
-                                <h4 class="text-xl font-black text-gray-900 dark:text-white mb-2">No Transactions Yet</h4>
-                                <p class="text-gray-500 font-medium max-w-sm">Start tracking your personal finances by adding your first transaction.</p>
-                            </div>
+                            <x-empty-state title="No Transactions Yet" color="gray"
+                                description="Start tracking your personal finances by adding your first transaction.">
+                                <x-slot name="icon">
+                                    <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </x-slot>
+                            </x-empty-state>
                         @endforelse
                     </div>
                 </div>
